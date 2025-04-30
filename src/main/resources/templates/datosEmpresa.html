@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Gestión de Empresa</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .container {
+            max-width: 800px;
+            margin-top: 50px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            box-shadow: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #ff6600;
+            box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
+        }
+
+        .btn-primary {
+            background-color: #ff6600;
+            border-color: #ff6600;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: #e65c00;
+            border-color: #e65c00;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-control-file {
+            padding: 10px;
+            background-color: #f7f7f7;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+        }
+
+        .form-control-file:focus {
+            border-color: #ff6600;
+        }
+
+        .alert {
+            opacity: 1;
+            transition: opacity 1s ease-out;
+        }
+
+        .fade-out {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Datos de la Empresa</h2>
+
+        <!-- Mensaje flash (éxito o error) -->
+        <div th:if="${mensaje}" th:class="'alert alert-' + ${clase}" role="alert" id="mensajeFlash" th:text="${mensaje}"></div>
+
+        <form th:action="@{/empresas/actualizar}" th:object="${empresa}" method="post" enctype="multipart/form-data">
+            <input type="hidden" th:field="*{id}" />
+
+            <div class="form-group">
+                <label for="nombre" class="form-label">Nombre:</label>
+                <input type="text" id="nombre" class="form-control" th:field="*{nombre}" placeholder="Ingrese el nombre de la empresa" />
+            </div>
+
+            <div class="form-group">
+                <label for="direccion" class="form-label">Dirección:</label>
+                <input type="text" id="direccion" class="form-control" th:field="*{direccion}" placeholder="Ingrese la dirección de la empresa" />
+            </div>
+
+            <div class="form-group">
+                <label for="telefono" class="form-label">Teléfono:</label>
+                <input type="text" id="telefono" class="form-control" th:field="*{telefono}" placeholder="Ingrese el número de teléfono" />
+            </div>
+
+            <div class="form-group">
+                <label for="whatsapp" class="form-label">Whatsapp:</label>
+                <input type="text" id="whatsapp" class="form-control" th:field="*{whatsapp}" placeholder="Ingrese el número de WhatsApp" />
+            </div>
+
+            <div class="form-group">
+                <label for="horario" class="form-label">Horario:</label>
+                <input type="text" id="horario" class="form-control" th:field="*{horario}" placeholder="Ingrese el horario de atención" />
+            </div>
+
+            <div class="form-group">
+                <label for="logo" class="form-label">Logo:</label>
+                <input type="file" id="logo" class="form-control-file" name="logo" accept="image/*" />
+            </div>
+
+            <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">Actualizar</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <!-- Ocultar automáticamente el mensaje flash -->
+    <script>
+        setTimeout(() => {
+            const mensaje = document.getElementById('mensajeFlash');
+            if (mensaje) {
+                mensaje.style.transition = "opacity 1s";
+                mensaje.style.opacity = 0;
+                setTimeout(() => mensaje.remove(), 1000);
+            }
+        }, 4000);
+    </script>
+</body>
+</html>

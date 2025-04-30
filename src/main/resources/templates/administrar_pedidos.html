@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administrar Pedidos</title>
+</head>
+<body>
+    <h1>Solicitud de Ventas</h1>
+    <c:forEach var="pedido" items="${pedidos}">
+        <div class="pedido">
+            <p>Nombre: ${pedido.nombre}</p>
+            <p>Teléfono: ${pedido.telefono}</p>
+            <p>Dirección: ${pedido.direccion}</p>
+            <p>Estado: ${pedido.estado}</p>
+            <form action="/carrito/aceptar-pedido/${pedido.id}" method="POST">
+                <button type="submit">Aceptar Pedido</button>
+            </form>
+            <form action="/carrito/rechazar-pedido/${pedido.id}" method="POST">
+                <button type="submit">Rechazar Pedido</button>
+            </form>
+        </div>
+    </c:forEach>
+</body>
+</html>

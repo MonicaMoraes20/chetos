@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitudes de Ventas</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Ventas</h1>
+    </header>
+    <main>
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>ID Venta</th>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aquí se iteran las ventas desde la base de datos -->
+                <tr th:each="venta : ${ventas}">
+                    <td th:text="${venta.id}"></td>
+                    <td th:text="${venta.producto}"></td>
+                    <td th:text="${venta.cantidad}"></td>
+                    <td th:text="${venta.precio}"></td>
+                    <td th:text="${venta.fecha}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

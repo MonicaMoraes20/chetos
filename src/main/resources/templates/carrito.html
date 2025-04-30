@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Carrito de Compras</title>
+</head>
+<body>
+    <h1>Carrito de Compras</h1>
+    <c:if test="${not empty carrito}">
+        <table>
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Talle</th>
+                    <th>Color</th>
+                    <th>Cantidad</th>
+                    <th>Precio Unitario</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:forEach var="detalle" items="${carrito}">
+                    <tr>
+                        <td>${detalle.producto.nombre}</td>
+                        <td>${detalle.talle}</td>
+                        <td>${detalle.color}</td>
+                        <td>${detalle.cantidad}</td>
+                        <td>${detalle.precio_unit}</td>
+                    </tr>
+                </c:forEach>
+            </tbody>
+        </table>
+        <form action="/carrito/realizar-pedido" method="POST">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" required>
+            <label for="direccion">Dirección:</label>
+            <input type="text" id="direccion" name="direccion" required>
+            <button type="submit">Realizar Pedido</button>
+        </form>
+    </c:if>
+</body>
+</html>
