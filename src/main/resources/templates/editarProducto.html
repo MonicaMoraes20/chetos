@@ -85,12 +85,18 @@
 <body>
   <div class="container">
     <h2>Editar Producto</h2>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" th:object="${producto}">
       <label for="nombre" class="form-label">Nombre</label>
-      <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto" th:value="${nombre}" required>
+      <input type="text" class="form-control" id="nombre" name="nombre" th:value="${nombre}" required>
 
       <label for="codigo" class="form-label">Código</label>
-      <input type="text" class="form-control" id="codigo" name="codigo" placeholder="Ingrese el código del producto"  th:value="${codigo}" required>
+      <input type="text" class="form-control" id="codigo" name="codigo" th:value="${codigo}" required>
+
+      <label for="talle" class="form-label">Talle</label>
+      <input type="text" class="form-control" id="talle" name="talle" th:value="${talle}" required>
+
+      <label for="color" class="form-label">Color</label>
+      <input type="text" class="form-control" id="color" name="color" th:value="${color}" required>
 
       <label for="descripcion" class="form-label">Descripción</label>
       <textarea class="form-control" id="descripcion" name="descripcion" rows="4" placeholder="Ingrese una descripción detallada"  th:text="${descripcion}" required></textarea>
@@ -112,8 +118,8 @@
       <label for="tipo" class="form-label">Tipo de Prenda</label>
       <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ingrese el tipo de prenda"  th:value="${tipo}" required>
 
-      <label for="foto" class="form-label">Foto del Producto</label>
-      <input type="file" class="form-control" id="foto" name="foto" accept="image/*">
+      <label for="file" class="form-label">Foto del Producto</label>
+      <input type="file" class="form-control" id="file" name="file" multiple/>
 
       <button type="submit" class="btn btn-custom mt-4">Guardar Cambios</button>
     </form>

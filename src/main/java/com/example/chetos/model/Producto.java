@@ -35,6 +35,12 @@ public class Producto {
     @NotBlank
     private String tipo;
 
+    @NotBlank
+    private String talle;
+
+    @NotBlank
+    private String color;
+
     private String foto;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
@@ -108,6 +114,22 @@ public class Producto {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public String getTalle() {
+        return talle;
+    }
+
+    public void setTalle(String talle) {
+        this.talle = talle;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public String getFoto() {

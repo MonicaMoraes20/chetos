@@ -16,10 +16,8 @@ public class DetallePedido {
     @NotBlank
     private String color;
 
-    @NotBlank
     private int cantidad;
 
-    @NotBlank
     private float precio_unit;
 
     @ManyToOne

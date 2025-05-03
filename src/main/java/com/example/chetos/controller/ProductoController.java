@@ -105,6 +105,8 @@ public class ProductoController {
         mv.addObject("descuento", producto.get().getDescuento());
         mv.addObject("genero", producto.get().getGenero());
         mv.addObject("tipo", producto.get().getTipo());
+        mv.addObject("talle", producto.get().getTalle());
+        mv.addObject("color", producto.get().getColor());
         mv.addObject("id", producto.get().getId());
         return mv;
     }
@@ -119,6 +121,8 @@ public class ProductoController {
         productoExistente.setDescuento(producto.getDescuento());
         productoExistente.setGenero(producto.getGenero());
         productoExistente.setTipo(producto.getTipo());
+        productoExistente.setTalle(producto.getTalle());
+        productoExistente.setColor(producto.getColor());
         productoRepository.save(productoExistente);
         return "redirect:/listarProductos";
     }
@@ -137,6 +141,8 @@ public class ProductoController {
         mv.addObject("descripcion", productos.get().getDescripcion());
         mv.addObject("precio", productos.get().getPrecio());
         mv.addObject("descuento", productos.get().getDescuento());
+        mv.addObject("talle", productos.get().getTalle());
+        mv.addObject("color", productos.get().getColor());
         mv.addObject("foto", productos.get().getFoto());
         return mv;
     }
