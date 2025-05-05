@@ -22,9 +22,6 @@ public class Usuario {
     @Column(nullable=false)
     private String password;
 
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Venta> ventaList;
-
 
     @Column(nullable = false)
 private String rol; // ADMIN, USER, etc.
@@ -70,11 +67,7 @@ public void setRol(String rol) {
         this.password = password;
     }
 
-    public List<Venta> getVentaList() {
-        return ventaList;
-    }
+   
 
-    public void setVentaList(List<Venta> ventaList) {
-        this.ventaList = ventaList;
-    }
+    
 }

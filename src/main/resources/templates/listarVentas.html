@@ -1,37 +1,60 @@
 <!DOCTYPE html>
-<html lang="es">
+<html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitudes de Ventas</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Listado de Ventas</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.0/js/dataTables.js"></script>
 </head>
+
 <body>
-    <header>
-        <h1>Ventas</h1>
-    </header>
-    <main>
-        <table border="1">
-            <thead>
-                <tr>
-                    <th>ID Venta</th>
-                    <th>Producto</th>
-                    <th>Cantidad</th>
-                    <th>Precio</th>
-                    <th>Fecha</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Aquí se iteran las ventas desde la base de datos -->
-                <tr th:each="venta : ${ventas}">
-                    <td th:text="${venta.id}"></td>
-                    <td th:text="${venta.producto}"></td>
-                    <td th:text="${venta.cantidad}"></td>
-                    <td th:text="${venta.precio}"></td>
-                    <td th:text="${venta.fecha}"></td>
-                </tr>
-            </tbody>
-        </table>
-    </main>
+    <h1>Ventas Realizadas</h1>
+
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Total</th>
+                <th>Productos</th>
+                <th>Pedido ID</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="venta : ${ventas}">
+                <td th:text="${venta.fecha}"></td>
+                <td th:text="${venta.nombreCliente}"></td>
+                <td th:text="${venta.telefono}"></td>
+                <td th:text="${venta.direccion}"></td>
+                <td th:text="${venta.total}"></td>
+                <td>
+                    <ul>
+                        <li th:each="detalle : ${venta.detalleVentaList}">
+                            <span th:text="${detalle.producto.nombre}"></span> -
+                            <span th:text="${detalle.cantidad}"></span> unid. -
+                            <span th:text="${detalle.talle}"></span> -
+                            <span th:text="${detalle.color}"></span>
+                        </li>
+                    </ul>
+                </td>
+                <td th:text="${venta.pedido.id}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Inicialización de DataTable con idioma español -->
+    <script>
+        let table = new DataTable('#myTable', {
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json'
+            }
+        });
+
+    </script>
 </body>
+
 </html>

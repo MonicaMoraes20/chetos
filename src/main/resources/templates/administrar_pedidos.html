@@ -1,25 +1,60 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Estilos de DataTables -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.css" />
+    <script src="https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json"></script>
+
+    
+
+    <!-- jQuery y DataTables -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/2.3.0/js/dataTables.js"></script>
+
     <title>Administrar Pedidos</title>
 </head>
 <body>
-    <h1>Solicitud de Ventas</h1>
-    <div th:each="pedido : ${pedidos}">
-        <div>
-            <p>Nombre: <span th:text="${pedido.nombre}"></span></p>
-            <p>Teléfono: <span th:text="${pedido.telefono}"></span></p>
-            <p>Dirección: <span th:text="${pedido.direccion}"></span></p>
-            <p>Estado: <span th:text="${pedido.estado}"></span></p>
-            <form action="/carrito/aceptar-pedido/${pedido.id}" method="POST">
-                <button type="submit">Aceptar Pedido</button>
-            </form>
-            <form action="/carrito/rechazar-pedido/${pedido.id}" method="POST">
-                <button type="submit">Rechazar Pedido</button>
-            </form>
-        </div>
-    </div>
+    <h1>Pedidos</h1>
+
+    <table id="myTable" class="display">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Teléfono</th>
+                <th>Dirección</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="pedido : ${pedidos}">
+                <td th:text="${pedido.nombre}"></td>
+                <td th:text="${pedido.telefono}"></td>
+                <td th:text="${pedido.direccion}"></td>
+                <td th:text="${pedido.estado}"></td>
+                <td>
+                    <form th:action="@{'/carrito/aceptar-pedido/' + ${pedido.id}}" method="POST" style="display:inline;">
+                        <button type="submit">Aceptar</button>
+                    </form>
+                    <form th:action="@{'/carrito/rechazar-pedido/' + ${pedido.id}}" method="POST" style="display:inline;">
+                        <button type="submit">Rechazar</button>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Inicialización de DataTable con idioma español -->
+    <script>
+       let table = new DataTable('#myTable', {
+    language: {
+        url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json'
+    }
+});
+
+    </script>
 </body>
 </html>

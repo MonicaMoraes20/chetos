@@ -43,6 +43,15 @@ public class Producto {
 
     private String foto;
 
+    private String foto1;
+
+    private String foto2;
+
+    private int stock;
+
+    @NotBlank
+    private String estado;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private LocalDate fecha_alta;
 
@@ -140,6 +149,24 @@ public class Producto {
         this.foto = foto;
     }
 
+
+    public String getFoto1() {
+        return foto1;
+    }
+
+    public void setFoto1(String foto1) {
+        this.foto1 = foto1;
+    }
+
+    public String getFoto2() {
+        return foto2;
+    }
+
+    public void setFoto2(String foto2) {
+        this.foto2 = foto2;
+    }
+
+
     public LocalDate getFecha_alta() {
         return fecha_alta;
     }
@@ -168,4 +195,25 @@ public class Producto {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'orElse'");
     }
+
+
+    public int getStock() {
+        return stock;
+    }
+
+    public void setStock(int stock) {
+        this.stock = stock;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+
+
+
 }

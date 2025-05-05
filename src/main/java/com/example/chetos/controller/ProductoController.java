@@ -34,13 +34,21 @@ public class ProductoController {
     }
 
     @RequestMapping(value="/nuevoProducto", method=RequestMethod.POST)
-    public String registroProducto(@Valid Producto producto, BindingResult result, RedirectAttributes msg, @RequestParam("file") MultipartFile foto) {
-        if(result.hasErrors()) {
-            msg.addFlashAttribute("error", "Error al registrar. Por favor, complete todos los campos");
+    public String registroProducto(@Valid Producto producto, BindingResult result, RedirectAttributes msg,
+     @RequestParam("file") MultipartFile foto, @RequestParam("file1") MultipartFile foto1, @RequestParam("file2") MultipartFile foto2) {
+        if (result.hasErrors()) {
+            // Imprimir los errores en la consola
+            result.getFieldErrors().forEach(error -> {
+                System.out.println("Campo con error: " + error.getField() + " - " + error.getDefaultMessage());
+            });
+    
+            // Agregar un mensaje genérico para el usuario
+            msg.addFlashAttribute("error", "Error al registrar. Por favor, complete todos los campos correctamente.");
             return "redirect:/nuevoProducto";
         }
 
         producto.setFecha_alta(LocalDate.now());
+        producto.setEstado("Activo");
 
         try {
             if (!foto.isEmpty()) {
@@ -49,6 +57,21 @@ public class ProductoController {
                 Files.write(caminho, bytes);
                 producto.setFoto(foto.getOriginalFilename());
             }
+            if (!foto1.isEmpty()) {
+                byte[] bytes1 = foto1.getBytes();
+                Path caminho1 = Paths.get("./src/main/resources/static/img/"+foto1.getOriginalFilename());
+                Files.write(caminho1, bytes1);
+                producto.setFoto1(foto1.getOriginalFilename());
+            }
+
+            if (!foto2.isEmpty()) {
+                byte[] bytes2 = foto2.getBytes();
+                Path caminho2 = Paths.get("./src/main/resources/static/img/"+foto2.getOriginalFilename());
+                Files.write(caminho2, bytes2);
+                producto.setFoto2(foto2.getOriginalFilename());
+            }
+
+
         } catch (IOException e) {
             System.out.println("Error foto");
         }
@@ -86,14 +109,6 @@ public class ProductoController {
     }
 
 
-
-
-
-
-
-
-
-
     @RequestMapping(value="/editarProducto/{id}", method=RequestMethod.GET)
     public ModelAndView editar(@PathVariable("id") Long id) {
         ModelAndView mv = new ModelAndView("editarProducto");
@@ -107,6 +122,8 @@ public class ProductoController {
         mv.addObject("tipo", producto.get().getTipo());
         mv.addObject("talle", producto.get().getTalle());
         mv.addObject("color", producto.get().getColor());
+        mv.addObject("estado", producto.get().getEstado());
+        mv.addObject("stock", producto.get().getStock());
         mv.addObject("id", producto.get().getId());
         return mv;
     }
@@ -123,6 +140,8 @@ public class ProductoController {
         productoExistente.setTipo(producto.getTipo());
         productoExistente.setTalle(producto.getTalle());
         productoExistente.setColor(producto.getColor());
+        productoExistente.setEstado(producto.getEstado());
+        productoExistente.setStock(producto.getStock());
         productoRepository.save(productoExistente);
         return "redirect:/listarProductos";
     }
@@ -144,6 +163,10 @@ public class ProductoController {
         mv.addObject("talle", productos.get().getTalle());
         mv.addObject("color", productos.get().getColor());
         mv.addObject("foto", productos.get().getFoto());
+        mv.addObject("foto1", productos.get().getFoto1());
+        mv.addObject("foto2", productos.get().getFoto2());
+        mv.addObject("stock", productos.get().getStock());
+
         return mv;
     }
 
