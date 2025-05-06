@@ -91,6 +91,7 @@ public class PedidoController {
     }
 
     // Crear un pedido
+
     @PostMapping("/realizar-pedido")
     public String realizarPedido(@RequestParam String nombre,
             @RequestParam String telefono,
@@ -109,7 +110,12 @@ public class PedidoController {
         pedido.setDireccion(direccion);
         pedido.setFecha(LocalDate.now());
         pedido.setEstado("Pendiente");
-        pedido.setDetallePedidoList(carrito);
+        pedido.setDetallePedidoList(carrito); // Asignas la lista de detalles al pedido
+
+        // **Itera sobre los detalles del carrito y asigna el pedido a cada uno**
+        for (DetallePedido detalle : carrito) {
+            detalle.setPedido(pedido); // Establece la relación con el pedido
+        }
 
         pedidoService.save(pedido);
 
@@ -128,28 +134,28 @@ public class PedidoController {
         mensaje.append("Teléfono: ").append(pedido.getTelefono()).append("\n");
         mensaje.append("Dirección: ").append(pedido.getDireccion()).append("\n\n");
         mensaje.append("Detalles del Pedido:\n\n");
-    
+
         for (DetallePedido detalle : pedido.getDetallePedidoList()) {
             float subtotal = detalle.getCantidad() * detalle.getPrecio_unit();
             String totalFormateado = String.format("R$ %.2f", subtotal).replace('.', ',');
-    
+
             mensaje.append("Producto: ").append(detalle.getProducto().getNombre()).append("\n");
             mensaje.append("Talle: ").append(detalle.getTalle()).append("\n");
             mensaje.append("Color: ").append(detalle.getColor()).append("\n");
             mensaje.append("Cantidad: ").append(detalle.getCantidad()).append("\n");
             mensaje.append("Total: ").append(totalFormateado).append("\n\n");
         }
-    
+
         // Codificar correctamente los saltos de línea
         return mensaje.toString().replace("\n", "%0A");
     }
-    
-    
+
     // Visualizar pedidos para el administrador
     @RequestMapping(value = "/administrar_pedidos", method = RequestMethod.GET)
     public ModelAndView administrarPedidos() {
         ModelAndView mv = new ModelAndView("administrar_pedidos");
-        List<Pedido> pedidos = pedidoRepository.findAll();
+        List<Pedido> pedidos = pedidoRepository.findAllByOrderByFechaDesc();
+
         mv.addObject("pedidos", pedidos);
         return mv; // Plantilla para gestionar pedidos
     }
@@ -164,13 +170,13 @@ public class PedidoController {
         List<DetalleVenta> detalleVentaList = new ArrayList<>();
 
         for (DetallePedido detalle : pedido.getDetallePedidoList()) {
-            // Descontar stock
-            Stock stock = stockService.findStockByProductoYColorYTalle(
-                    detalle.getProducto().getId(),
-                    detalle.getColor(),
-                    detalle.getTalle());
-            stock.setCantidad(stock.getCantidad() - detalle.getCantidad());
-            stockService.save(stock);
+            // Obtener el producto
+            Producto producto = productoService.findById(detalle.getProducto().getId());
+            int cantidadComprada = detalle.getCantidad();
+
+            // Actualizar el stock del producto
+            producto.setStock(producto.getStock() - cantidadComprada);
+            productoService.save(producto); // Guardar la actualización del producto
 
             // Crear detalle de venta
             DetalleVenta dv = new DetalleVenta();

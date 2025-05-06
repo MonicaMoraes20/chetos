@@ -20,7 +20,6 @@ public class VentaController {
     public ModelAndView getVentas() {
         ModelAndView mv = new ModelAndView("listarVentas");
         List<Venta> ventas = ventaRepository.findAll();
-        ventas.forEach(venta -> venta.getDetalleVentaList().size());
         mv.addObject("ventas", ventas);
         return mv;
     }
