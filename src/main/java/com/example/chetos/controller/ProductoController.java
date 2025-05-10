@@ -157,6 +157,7 @@ public class ProductoController {
         ModelAndView mv = new ModelAndView("vermasProducto");
         Optional<Producto> productos = productoRepository.findById(id);
         mv.addObject("nombre", productos.get().getNombre());
+        mv.addObject("codigo", productos.get().getCodigo());
         mv.addObject("descripcion", productos.get().getDescripcion());
         mv.addObject("precio", productos.get().getPrecio());
         mv.addObject("descuento", productos.get().getDescuento());

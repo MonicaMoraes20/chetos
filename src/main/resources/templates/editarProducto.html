@@ -87,6 +87,9 @@
 </head>
 
 <body>
+
+
+  <div th:insert="PanelControlAdmin :: navbar"></div>
   <div class="container">
     <h2>Editar Producto</h2>
     <form method="post" enctype="multipart/form-data" th:object="${producto}">

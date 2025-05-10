@@ -7,14 +7,18 @@
 
     <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <!-- jQuery y DataTables -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.0/js/dataTables.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.js"></script>
+       
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.js"></script>
+    <div th:insert="PanelControlAdmin :: navbar"></div>
 
-    
     <style>
         /* General */
         body {
@@ -24,12 +28,21 @@
             padding: 0;
         }
 
+        h2 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 50px;
+            color: #0a0a0a;
+        }
+
         h1 {
             text-align: center;
             margin-top: 20px;
             font-size: 24px;
             color: #0a0a0a;
         }
+
+
 
         .datatable-controls {
             display: flex;
@@ -38,7 +51,7 @@
             margin: 20px;
             align-items: center;
             gap: 10px;
-        
+
         }
 
         .datatable-controls label,
@@ -82,7 +95,7 @@
             background-color: #f2f2f2;
         }
 
-        
+
         .estado-pendiente {
             background-color: #ffbf00;
             color: #ffffff;
@@ -126,12 +139,14 @@
 
         /* Botón de Rechazar */
         button.rechazar {
-            background-color: #ff0019; /* Rojo */
+            background-color: #ff0019;
+            /* Rojo */
             color: white;
         }
 
         button.rechazar:hover {
-            background-color: #d8071d; /* Rojo oscuro en hover */
+            background-color: #d8071d;
+            /* Rojo oscuro en hover */
         }
 
         /* Estilos responsivos */
@@ -191,57 +206,107 @@
                 font-size: 12px;
                 padding: 8px 12px;
             }
+
+            .filtros-container {
+                background-color: #ffffff;
+                padding: 20px;
+                margin: 20px auto;
+                max-width: 1200px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .filtros-container h2 {
+                margin-top: 0;
+                margin-bottom: 15px;
+                font-size: 20px;
+                color: #333;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 10px;
+            }
+
+            .datatable-controls>div {
+                display: flex;
+                flex-direction: column;
+                margin-right: 15px;
+            }
+
+            .datatable-controls input,
+            .datatable-controls select {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 6px 10px;
+                background-color: #fafafa;
+                transition: border 0.2s;
+            }
+
+            .datatable-controls input:focus,
+            .datatable-controls select:focus {
+                outline: none;
+                border-color: #333;
+                background-color: #fff;
+            }
+
+            .clear-btn {
+                background-color: #888;
+                padding: 8px 15px;
+                border: none;
+                border-radius: 4px;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            
+            .clear-btn:hover {
+                background-color: #555;
+            }
+
         }
     </style>
 </head>
 
 <body>
-    <h1>GESTIONAR  PEDIDOS </h1>
+    
+ 
 
-    <label>
-        Buscar por nombre:
-    </label>
-    <div>
-        <input id="nombreInput" type="text">
+    <div class="filtros-container">
+        <h2> GESTIONAR PEDIDOS </h2>
+        <div class="datatable-controls">
+            <div>
+                <label for="nombreInput">Nombre:</label>
+                <input id="nombreInput" type="text" placeholder="Buscar por nombre">
+            </div>
+            <div>
+                <label for="telefonoInput">Teléfono:</label>
+                <input id="telefonoInput" type="text" placeholder="Buscar por teléfono">
+            </div>
+            <div>
+                <label for="direccionInput">Dirección:</label>
+                <input id="direccionInput" type="text" placeholder="Buscar por dirección">
+            </div>
+            <div>
+                <label for="estadoInput">Estado:</label>
+                <select id="estadoInput">
+                    <option value="">Todos</option>
+                    <option value="Aceptado">Aceptado</option>
+                    <option value="Rechazado">Rechazado</option>
+                    <option value="Pendiente">Pendiente</option>
+                </select>
+            </div>
+            <div>
+                <label for="fechaInicio">Desde:</label>
+                <input type="date" id="fechaInicio">
+            </div>
+            <div>
+                <label for="fechaFin">Hasta:</label>
+                <input type="date" id="fechaFin">
+            </div>
+            <div>
+                <button id="limpiarFiltrosBtn" type="button" class="clear-btn">Limpiar Filtros</button>
+            </div>
+        </div>
     </div>
 
-    <label>
-        Buscar por teléfono:
-    </label>
-    <div>
-        <input id="telefonoInput" type="text">
-    </div>
-
-    <label>
-        Buscar por dirección:
-    </label>
-    <div>
-        <input id="direccionInput" type="text">
-    </div>
-
-    <label>
-        Buscar por estado:
-    </label>
-    <div>
-        <select id="estadoInput">
-            <option value="">Todos</option>
-            <option value="Aceptado">Aceptado</option>
-            <option value="Rechazado">Rechazado</option>
-            <option value="Pendiente">Pendiente</option>
-        </select>
-    </div>
-
-    <label for="fechaInicio">Filtrar por fecha (Desde):</label>
-    <div>
-        <input type="date" id="fechaInicio">
-    </div>
-
-    <label for="fechaFin">Filtrar por fecha (Hasta):</label>
-    <div>
-        <input type="date" id="fechaFin">
-    </div>
-
-    <button id="limpiarFiltrosBtn" type="button">Limpiar Filtros</button>
 
     <table id="myTable" class="display">
         <thead>
@@ -260,16 +325,21 @@
                 <td th:text="${pedido.telefono}"></td>
                 <td th:text="${pedido.direccion}"></td>
                 <td>
-                    <span th:class="${pedido.estado == 'Pendiente' ? 'estado-pendiente' : (pedido.estado == 'Rechazado' ? 'estado-rechazado' : 'estado-aceptado')}"
-                          th:text="${pedido.estado}"></span>
+                    <span
+                        th:class="${pedido.estado == 'Pendiente' ? 'estado-pendiente' : (pedido.estado == 'Rechazado' ? 'estado-rechazado' : 'estado-aceptado')}"
+                        th:text="${pedido.estado}"></span>
                 </td>
                 <td th:text="${#temporals.format(pedido.fecha, 'dd-MM-yyyy')}"></td>
                 <td>
-                    <form th:action="@{'/carrito/aceptar-pedido/' + ${pedido.id}}" method="POST" style="display:inline;">
-                        <button type="submit" th:disabled="${pedido.estado == 'Aceptado' or pedido.estado == 'Rechazado'}">Aceptar</button>
+                    <form th:action="@{'/carrito/aceptar-pedido/' + ${pedido.id}}" method="POST"
+                        style="display:inline;">
+                        <button type="submit"
+                            th:disabled="${pedido.estado == 'Aceptado' or pedido.estado == 'Rechazado'}">Aceptar</button>
                     </form>
-                    <form th:action="@{'/carrito/rechazar-pedido/' + ${pedido.id}}" method="POST" style="display:inline;">
-                        <button type="submit" class="rechazar" th:disabled="${pedido.estado == 'Aceptado' or pedido.estado == 'Rechazado'}">Rechazar</button>
+                    <form th:action="@{'/carrito/rechazar-pedido/' + ${pedido.id}}" method="POST"
+                        style="display:inline;">
+                        <button type="submit" class="rechazar"
+                            th:disabled="${pedido.estado == 'Aceptado' or pedido.estado == 'Rechazado'}">Rechazar</button>
                     </form>
                 </td>
             </tr>
@@ -285,7 +355,6 @@
                 }
             });
 
-        
 
             $('#nombreInput').on('keyup', function () {
                 table.columns(0).search(this.value).draw();
@@ -300,49 +369,48 @@
                 table.columns(3).search(this.value).draw();
             });
             // Filtro por rango de fechas
-                        $('#fechaInicio, #fechaFin').on('change', function () {
-                table.draw();
-            });
+            $('#fechaInicio, #fechaFin').on('change', function () {
+                table.draw();
+            });
 
-            // Función de filtro personalizada para el rango de fechas
-            $.fn.dataTable.ext.search.push(
-                function (settings, data, dataIndex) {
-                    let fechaInicio = $('#fechaInicio').val();
-                    let fechaFin = $('#fechaFin').val();
-                    let fechaPedidoStr = data[4]; // La columna de fecha (índice 4, empezando desde 0)
-                    let fechaPedido = moment(fechaPedidoStr, 'DD-MM-YYYY');
+            // Función de filtro personalizada para el rango de fechas
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    let fechaInicio = $('#fechaInicio').val();
+                    let fechaFin = $('#fechaFin').val();
+                    let fechaPedidoStr = data[4]; // La columna de fecha (índice 4, empezando desde 0)
+                    let fechaPedido = moment(fechaPedidoStr, 'DD-MM-YYYY');
 
-                    if ((fechaInicio === "" && fechaFin === "") ||
-                        (fechaInicio === "" && fechaPedido.isSameOrBefore(moment(fechaFin))) ||
-                        (fechaPedido.isSameOrAfter(moment(fechaInicio)) && fechaFin === "") ||
-                        (fechaPedido.isSameOrAfter(moment(fechaInicio)) && fechaPedido.isSameOrBefore(moment(fechaFin)))) {
-                        return true;
-                    }
-                    return false;
-                }
-            );
+                    if ((fechaInicio === "" && fechaFin === "") ||
+                        (fechaInicio === "" && fechaPedido.isSameOrBefore(moment(fechaFin))) ||
+                        (fechaPedido.isSameOrAfter(moment(fechaInicio)) && fechaFin === "") ||
+                        (fechaPedido.isSameOrAfter(moment(fechaInicio)) && fechaPedido.isSameOrBefore(moment(fechaFin)))) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
 
-// Botón para limpiar todos los filtros
-            $('#limpiarFiltrosBtn').on('click', function () {
-                // Limpiar los campos de entrada de texto
-                $('#nombreInput').val('').keyup();
-                $('#telefonoInput').val('').keyup();
-                $('#direccionInput').val('').keyup();
+            // Botón para limpiar todos los filtros
+            $('#limpiarFiltrosBtn').on('click', function () {
+                // Limpiar los campos de entrada de texto
+                $('#nombreInput').val('').keyup();
+                $('#telefonoInput').val('').keyup();
+                $('#direccionInput').val('').keyup();
 
-                // Restablecer el selector de estado a "Todos"
-                $('#estadoInput').val('').change();
+                // Restablecer el selector de estado a "Todos"
+                $('#estadoInput').val('').change();
 
-                // Limpiar los campos de fecha
-                $('#fechaInicio').val('').change();
-                $('#fechaFin').val('').change();
+                // Limpiar los campos de fecha
+                $('#fechaInicio').val('').change();
+                $('#fechaFin').val('').change();
 
-                // Redibujar la tabla para aplicar los filtros vacíos
-                table.draw();
-            });
+                // Redibujar la tabla para aplicar los filtros vacíos
+                table.draw();
+            });
 
         });
     </script>
-
 </body>
 
 </html>

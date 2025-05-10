@@ -1,16 +1,295 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <title>Listado de Ventas</title>
+
+    <!-- Estilos y scripts necesarios -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.css" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.0/js/dataTables.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.js"></script>
+
+    <style>
+     
+        /* General */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 24px;
+            color: #0a0a0a;
+        }
+
+        .datatable-controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            margin: 20px;
+            align-items: center;
+            gap: 10px;
+
+        }
+
+        .datatable-controls label,
+        .datatable-controls select,
+        .datatable-controls input,
+        .datatable-controls button {
+            font-size: 14px;
+            padding: 8px;
+            margin: 5px 0;
+            box-sizing: border-box;
+        }
+
+        .datatable-controls input,
+        .datatable-controls select {
+            width: 150px;
+            max-width: 100%;
+        }
+
+        /* Tabla responsive */
+        #myTable {
+            width: 100%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+
+        #myTable th,
+        #myTable td {
+            padding: 10px;
+            text-align: left;
+            border: 1px solid #ddd;
+            font-size: 14px;
+        }
+
+        #myTable th {
+            background-color: #333;
+            color: white;
+        }
+
+        #myTable tbody tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+
+        .estado-pendiente {
+            background-color: #ffbf00;
+            color: #ffffff;
+            padding: 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .estado-aceptado {
+            background-color: #a5f0b6;
+            color: #02661b;
+            padding: 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        .estado-rechazado {
+            background-color: #f0979e;
+            color: #f30920;
+            padding: 5px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+
+        /* Botones */
+        button {
+            background-color: #02330e;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin: 5px;
+            font-size: 13px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #b30600;
+        }
+
+        /* Botón de Rechazar */
+        button.rechazar {
+            background-color: #ff0019;
+            /* Rojo */
+            color: white;
+        }
+
+        button.rechazar:hover {
+            background-color: #d8071d;
+            /* Rojo oscuro en hover */
+        }
+
+        /* Estilos responsivos */
+        @media (max-width: 768px) {
+            .datatable-controls {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            #myTable th,
+            #myTable td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .datatable-controls input,
+            .datatable-controls select {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 8px 12px;
+                width: 100%;
+                /* Ajustamos para pantallas pequeñas */
+            }
+
+            .clear-btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            #myTable {
+                display: block;
+                overflow-x: scroll;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 18px;
+            }
+
+            .datatable-controls input,
+            .datatable-controls select {
+                font-size: 12px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .clear-btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .filtros-container {
+                background-color: #ffffff;
+                padding: 20px;
+                margin: 20px auto;
+                max-width: 1200px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .filtros-container h2 {
+                margin-top: 0;
+                margin-bottom: 15px;
+                font-size: 20px;
+                color: #333;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 10px;
+            }
+
+            .datatable-controls>div {
+                display: flex;
+                flex-direction: column;
+                margin-right: 15px;
+            }
+
+            .datatable-controls input,
+            .datatable-controls select {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 6px 10px;
+                background-color: #fafafa;
+                transition: border 0.2s;
+            }
+
+            .datatable-controls input:focus,
+            .datatable-controls select:focus {
+                outline: none;
+                border-color: #333;
+                background-color: #fff;
+            }
+
+            .clear-btn {
+                background-color: #888;
+                padding: 8px 15px;
+                border: none;
+                border-radius: 4px;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            
+            .clear-btn:hover {
+                background-color: #555;
+            }
+
+        }
+    </style>
+    </style>
 </head>
 
 <body>
-    <h1>Ventas Realizadas</h1>
+    <div th:insert="PanelControlAdmin :: navbar"></div>
+
+    <h1>VENTAS REALIZADAS</h1>
+
+    <div class="filtros-container">
+        
+        <div class="datatable-controls">
+            <div>
+                <label for="clienteInput">Cliente:</label>
+                <input id="clienteInput" type="text" placeholder="Buscar por cliente">
+            </div>
+            <div>
+                <label for="telefonoInput">Teléfono:</label>
+                <input id="telefonoInput" type="text" placeholder="Buscar por teléfono">
+            </div>
+            <div>
+                <label for="direccionInput">Dirección:</label>
+                <input id="direccionInput" type="text" placeholder="Buscar por dirección">
+            </div>
+            <div>
+                <label for="pedidoIdInput">Pedido ID:</label>
+                <input id="pedidoIdInput" type="text" placeholder="Buscar por ID">
+            </div>
+            <div>
+                <label for="fechaInicio">Desde:</label>
+                <input type="date" id="fechaInicio">
+            </div>
+            <div>
+                <label for="fechaFin">Hasta:</label>
+                <input type="date" id="fechaFin">
+            </div>
+            <div>
+                <button id="limpiarFiltrosBtn" type="button" class="clear-btn">Limpiar Filtros</button>
+            </div>
+        </div>
+    </div>
 
     <table id="myTable" class="display">
         <thead>
@@ -46,14 +325,61 @@
         </tbody>
     </table>
 
-    <!-- Inicialización de DataTable con idioma español -->
     <script>
-        let table = new DataTable('#myTable', {
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json'
-            }
-        });
+        document.addEventListener("DOMContentLoaded", function () {
+            let table = new DataTable('#myTable', {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json'
+                }
+            });
 
+            $('#clienteInput').on('keyup', function () {
+                table.columns(1).search(this.value).draw();
+            });
+
+            $('#telefonoInput').on('keyup', function () {
+                table.columns(2).search(this.value).draw();
+            });
+
+            $('#direccionInput').on('keyup', function () {
+                table.columns(3).search(this.value).draw();
+            });
+
+            $('#pedidoIdInput').on('keyup', function () {
+                table.columns(6).search(this.value).draw();
+            });
+
+            $('#fechaInicio, #fechaFin').on('change', function () {
+                table.draw();
+            });
+
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                    let fechaInicio = $('#fechaInicio').val();
+                    let fechaFin = $('#fechaFin').val();
+                    let fechaVentaStr = data[0];
+                    let fechaVenta = moment(fechaVentaStr, 'DD-MM-YYYY'); // Ajustar si tu fecha está en otro formato
+
+                    if ((fechaInicio === "" && fechaFin === "") ||
+                        (fechaInicio === "" && fechaVenta.isSameOrBefore(moment(fechaFin))) ||
+                        (fechaVenta.isSameOrAfter(moment(fechaInicio)) && fechaFin === "") ||
+                        (fechaVenta.isSameOrAfter(moment(fechaInicio)) && fechaVenta.isSameOrBefore(moment(fechaFin)))) {
+                        return true;
+                    }
+                    return false;
+                }
+            );
+
+            $('#limpiarFiltrosBtn').on('click', function () {
+                $('#clienteInput').val('').keyup();
+                $('#telefonoInput').val('').keyup();
+                $('#direccionInput').val('').keyup();
+                $('#pedidoIdInput').val('').keyup();
+                $('#fechaInicio').val('').change();
+                $('#fechaFin').val('').change();
+                table.draw();
+            });
+        });
     </script>
 </body>
 

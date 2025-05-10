@@ -5,10 +5,12 @@ import com.example.chetos.service.EmpresaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -39,46 +41,52 @@ public class EmpresaController {
 
     // Método para actualizar los datos de la empresa, incluyendo la imagen
     @PostMapping("/actualizar")
-    public String actualizarEmpresa(@ModelAttribute Empresa empresa,
-                                    @RequestParam("logo") MultipartFile logoFile,
-                                    RedirectAttributes redirectAttributes) {
+    public String actualizarEmpresa(@ModelAttribute Empresa empresa, BindingResult result,
+            @RequestParam("file") MultipartFile logo,
+            RedirectAttributes redirectAttributes) {
+        if (result.hasErrors()) {
+            redirectAttributes.addFlashAttribute("mensaje", "Error al actualizar la empresa: " + result.getAllErrors());
+            redirectAttributes.addFlashAttribute("clase", "danger");
+            return "redirect:/empresas";
+        }
         try {
             // Verificamos si se sube un archivo de logo
-            if (!logoFile.isEmpty()) {
-                // Guardamos el archivo en un directorio específico
-                String uploadDir = "src/main/resources/static/logos/"; // Directorio donde almacenarás el logo
-                String fileName = logoFile.getOriginalFilename(); // Obtiene el nombre original del archivo
-                Path filePath = Paths.get(uploadDir + fileName);  // Ruta completa del archivo
+            if (!logo.isEmpty()) {
+                byte[] bytes = logo.getBytes();
+                Path path = Paths.get("src/main/resources/static/img/" + logo.getOriginalFilename());
+                Files.write(path, bytes);
+                empresa.setLogo(logo.getOriginalFilename()); // Guardamos la ruta del logo
 
-                // Guardar el archivo en el sistema de archivos
-                Files.copy(logoFile.getInputStream(), filePath);
-
-                // Actualizamos la entidad empresa con la ruta del logo
-                empresa.setLogoPath("/logos/" + fileName);  // La ruta relativa que se guardará en la base de datos
-            } else {
-                // Si no se sube un logo, mantenemos la ruta existente (si hay alguna)
-                Empresa existente = empresaService.obtenerEmpresaPorId(empresa.getId()).orElse(null);
-                if (existente != null) {
-                    empresa.setLogoPath(existente.getLogoPath()); // Usamos la ruta del logo existente
-                }
             }
-
-            // Guardamos la empresa en la base de datos
-            empresaService.guardarEmpresa(empresa);
-
-            // Mensaje de éxito
-            redirectAttributes.addFlashAttribute("mensaje", "¡La empresa fue actualizada correctamente!");
-            redirectAttributes.addFlashAttribute("clase", "success");
 
         } catch (IOException e) {
             // Mensaje de error
-            redirectAttributes.addFlashAttribute("mensaje", "Error al actualizar la empresa: " + e.getMessage());
+            System.out.println("Error al guardar la imagen: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("mensaje", "Error al guardar la imagen: " + e.getMessage());
             redirectAttributes.addFlashAttribute("clase", "danger");
+            return "redirect:/empresas";
         }
+
+        empresaService.guardarEmpresa(empresa);
+
+        // Mensaje de éxito
+        redirectAttributes.addFlashAttribute("mensaje", "¡La empresa fue actualizada correctamente!");
+        redirectAttributes.addFlashAttribute("clase", "success");
 
         return "redirect:/empresas";
     }
 
-    
-}
+    // Metodo para mostrar el logo en index
+   @RequestMapping(value="/logo/{logo}", method=RequestMethod.GET)
+    @ResponseBody
 
+     public byte[] getLogo(@PathVariable("logo") String logo) throws IOException {
+        File path = new File("./src/main/resources/static/img/" + logo);
+        if (logo != null || logo.trim().length() > 0) {
+            return Files.readAllBytes(path.toPath());
+        }
+        return null;
+
+    }
+
+}

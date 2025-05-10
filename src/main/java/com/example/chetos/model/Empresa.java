@@ -26,8 +26,8 @@ public class Empresa {
     @NotBlank
     private String horario;
 
-    @Column(name = "logo_path") // Asegúrate de que el nombre coincida con el de la base de datos
-    private String logoPath;
+    @Column(name = "logo") // Asegúrate de que el nombre coincida con el de la base de datos
+    private String logo;
 
     // Getters y setters
     public long getId() {
@@ -78,11 +78,11 @@ public class Empresa {
         this.horario = horario;
     }
 
-    public String getLogoPath() {
-        return logoPath;
+    public String getLogo() {
+        return logo;
     }
 
-    public void setLogoPath(String logoPath) {
-        this.logoPath = logoPath;
+    public void setLogo(String logo) {
+        this.logo= logo;
     }
 }

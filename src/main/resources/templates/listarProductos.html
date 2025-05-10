@@ -4,18 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Productos</title>
-    <!-- Incluir Bootstrap CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Estilos de DataTables -->
+    <!-- DataTables CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/2.3.0/css/dataTables.dataTables.css" />
-    <script src="https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json"></script>
 
-    
-
-    <!-- jQuery y DataTables -->
+    <!-- jQuery y DataTables JS -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/2.3.0/js/dataTables.js"></script>
+
     <style>
         body {
             background-color: #f4f6f9;
@@ -50,13 +48,204 @@
             height: auto;
             border-radius: 5px;
         }
+        .filtros-container {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            width: 95%;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .datatable-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            align-items: center;
+        }
+        .datatable-controls label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+        .datatable-controls input {
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+        .clear-btn {
+            background-color: #02330e;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+        }
+        .clear-btn:hover {
+            background-color: #a71d2a;
+        }
+
+
+         /* Tabla responsive */
+         #myTable {
+            width: 100%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            overflow-x: auto;
+        }
+
+
+         /* Estilos responsivos */
+         @media (max-width: 768px) {
+            .datatable-controls {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            #myTable th,
+            #myTable td {
+                padding: 8px;
+                font-size: 12px;
+            }
+
+            .datatable-controls input,
+            .datatable-controls select {
+                width: 100%;
+                font-size: 14px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 8px 12px;
+                width: 100%;
+                /* Ajustamos para pantallas pequeñas */
+            }
+
+            .clear-btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            #myTable {
+                display: block;
+                overflow-x: scroll;
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 18px;
+            }
+
+            .datatable-controls input,
+            .datatable-controls select {
+                font-size: 12px;
+            }
+
+            button {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .clear-btn {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+
+            .filtros-container {
+                background-color: #ffffff;
+                padding: 20px;
+                margin: 20px auto;
+                max-width: 1200px;
+                border-radius: 8px;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .filtros-container h2 {
+                margin-top: 0;
+                margin-bottom: 15px;
+                font-size: 20px;
+                color: #333;
+                border-bottom: 1px solid #ddd;
+                padding-bottom: 10px;
+            }
+
+            .datatable-controls>div {
+                display: flex;
+                flex-direction: column;
+                margin-right: 15px;
+            }
+
+            .datatable-controls input,
+            .datatable-controls select {
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 6px 10px;
+                background-color: #fafafa;
+                transition: border 0.2s;
+            }
+
+            .datatable-controls input:focus,
+            .datatable-controls select:focus {
+                outline: none;
+                border-color: #333;
+                background-color: #fff;
+            }
+
+            .clear-btn {
+                background-color: #888;
+                padding: 8px 15px;
+                border: none;
+                border-radius: 4px;
+                color: #fff;
+                font-weight: bold;
+            }
+
+            
+            .clear-btn:hover {
+                background-color: #555;
+            }
+
+        }
     </style>
 </head>
 <body>
+    <div th:insert="PanelControlAdmin :: navbar"></div>
 
     <div class="table-container">
         <h2 class="text-center mb-4">Lista de Productos</h2>
-        
+
+        <div class="filtros-container">
+            <h5>Filtrar Productos</h5>
+            <div class="datatable-controls">
+                <div>
+                    <label for="codigoInput">Código:</label>
+                    <input id="codigoInput" type="text" placeholder="Buscar por código">
+                </div>
+                <div>
+                    <label for="nombreInput">Nombre:</label>
+                    <input id="nombreInput" type="text" placeholder="Buscar por nombre">
+                </div>
+                <div>
+                    <label for="generoInput">Género:</label>
+                    <input id="generoInput" type="text" placeholder="Buscar por género">
+                </div>
+                <div>
+                    <label for="tipoInput">Tipo:</label>
+                    <input id="tipoInput" type="text" placeholder="Buscar por tipo">
+                </div>
+                <div>
+                    <label for="talleInput">Talla:</label>
+                    <input id="talleInput" type="text" placeholder="Buscar por talla">
+                </div>
+                <div>
+                    <label for="estadoInput">Estado:</label>
+                    <input id="estadoInput" type="text" placeholder="Buscar por estado">
+                </div>
+                <div>
+                    <button id="limpiarFiltrosBtn" type="button" class="clear-btn">Limpiar Filtros</button>
+                </div>
+            </div>
+        </div>
+
         <table id="myTable" class="display">
             <thead>
                 <tr>
@@ -70,10 +259,8 @@
                     <th scope="col">Talla</th>
                     <th scope="col">Estado</th>
                     <th scope="col">Stock</th>
-
                     <th scope="col">Foto</th>
                     <th scope="col">Acciones</th>
-                    
                 </tr>
             </thead>
             <tbody>
@@ -98,17 +285,45 @@
         </table>
     </div>
 
-    <!-- Incluir Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Inicialización de DataTable y filtros -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let table = new DataTable('#myTable', {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json'
+                }
+            });
 
-     <!-- Inicialización de DataTable con idioma español -->
-     <script>
-        let table = new DataTable('#myTable', {
-     language: {
-         url: 'https://cdn.datatables.net/plug-ins/2.3.0/i18n/es-ES.json'
-     }
- });
- 
-     </script>
+            $('#codigoInput').on('keyup', function () {
+                table.columns(0).search(this.value).draw();
+            });
+            $('#nombreInput').on('keyup', function () {
+                table.columns(1).search(this.value).draw();
+            });
+            $('#generoInput').on('keyup', function () {
+                table.columns(5).search(this.value).draw();
+            });
+            $('#tipoInput').on('keyup', function () {
+                table.columns(6).search(this.value).draw();
+            });
+            $('#talleInput').on('keyup', function () {
+                table.columns(7).search(this.value).draw();
+            });
+            $('#estadoInput').on('keyup', function () {
+                table.columns(8).search(this.value).draw();
+            });
+
+            $('#limpiarFiltrosBtn').on('click', function () {
+                $('#codigoInput, #nombreInput, #generoInput, #tipoInput, #talleInput, #estadoInput').val('').keyup();
+                table.search('').columns().search('').draw();
+            });
+        });
+    </script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
+<!-- Este html esta listo , ya con el menu  listo, con el include del painel del adminsitrador: -->

@@ -87,6 +87,11 @@
     </style>
 </head>
 <body>
+
+
+
+    <div th:insert="PanelControlAdmin :: navbar"></div>
+
     <div class="container">
         <h2>Datos de la Empresa</h2>
 
@@ -123,7 +128,7 @@
 
             <div class="form-group">
                 <label for="logo" class="form-label">Logo:</label>
-                <input type="file" id="logo" class="form-control-file" name="logo" accept="image/*" />
+                <input type="file" id="logo" class="form-control-file" name="file" accept="image/*" />
             </div>
 
             <div class="form-group text-center">
