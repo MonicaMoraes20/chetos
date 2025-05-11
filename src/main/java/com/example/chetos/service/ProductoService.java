@@ -9,5 +9,9 @@ public interface ProductoService {
 
     Producto save(Producto producto);
     Producto obtenerProductoPorId(Long id);
+     
+
+    List<Producto> findByGenero(String genero);
+
 
 }

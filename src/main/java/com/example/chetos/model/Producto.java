@@ -27,7 +27,7 @@ public class Producto {
     @NotBlank
     private String precio;
 
-    private String descuento;
+    private int descuento;
 
     @NotBlank
     private String genero;
@@ -101,11 +101,11 @@ public class Producto {
         this.precio = precio;
     }
 
-    public String getDescuento() {
+    public int getDescuento() {
         return descuento;
     }
 
-    public void setDescuento(String descuento) {
+    public void setDescuento(int descuento) {
         this.descuento = descuento;
     }
 

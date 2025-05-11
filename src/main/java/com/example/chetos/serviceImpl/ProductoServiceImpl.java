@@ -32,4 +32,11 @@ public class ProductoServiceImpl implements ProductoService {
     public Producto obtenerProductoPorId(Long id) {
         return productoRepository.findById(id).orElse(null);  // Implementación del método solicitado
     }
-}
+
+
+   @Override
+   public List<Producto> findByGenero(String genero) {
+       return productoRepository.findByGenero(genero);
+   }
+
+    }

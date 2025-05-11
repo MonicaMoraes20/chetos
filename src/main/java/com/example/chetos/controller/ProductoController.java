@@ -19,6 +19,7 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Controller
 public class ProductoController {
@@ -92,13 +93,59 @@ public class ProductoController {
         return null;
     }
 
-    @RequestMapping(value="/index", method=RequestMethod.GET)
-    public ModelAndView getProductos() {
-        ModelAndView mv = new ModelAndView("index");
-        List<Producto> productoList = productoRepository.findAll();
-        mv.addObject("productos", productoList);
-        return mv;
+    @GetMapping("/index")
+public ModelAndView listarProductos(
+        @RequestParam(required = false) String talle,
+        @RequestParam(required = false) String color,
+        @RequestParam(required = false) String tipo,
+        @RequestParam(required = false) String genero,
+        @RequestParam(required = false) String nombre
+) {
+    List<Producto> productos = productoRepository.findAll();
+
+    // Filtrado manual en memoria (puedes optimizar esto con consultas dinámicas en BD si necesitas)
+    if (talle != null && !talle.isEmpty()) {
+        productos = productos.stream()
+                .filter(p -> p.getTalle() != null && p.getTalle().equalsIgnoreCase(talle))
+                .collect(Collectors.toList());
     }
+
+    if (color != null && !color.isEmpty()) {
+        productos = productos.stream()
+                .filter(p -> p.getColor() != null && p.getColor().equalsIgnoreCase(color))
+                .collect(Collectors.toList());
+    }
+
+    if (tipo != null && !tipo.isEmpty()) {
+        productos = productos.stream()
+                .filter(p -> p.getTipo() != null && p.getTipo().equalsIgnoreCase(tipo))
+                .collect(Collectors.toList());
+    }
+
+    if (genero != null && !genero.isEmpty()) {
+        productos = productos.stream()
+                .filter(p -> p.getGenero() != null && p.getGenero().equalsIgnoreCase(genero))
+                .collect(Collectors.toList());
+    }
+
+    if (nombre != null && !nombre.isEmpty()) {
+        productos = productos.stream()
+                .filter(p -> p.getNombre() != null && p.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    ModelAndView mav = new ModelAndView("index");
+    mav.addObject("productos", productos);
+
+    // También puedes enviar las listas para poblar los selects
+    mav.addObject("talles", productoRepository.findAllTalles());
+    mav.addObject("colores", productoRepository.findAllColores());
+    mav.addObject("tipos", productoRepository.findAllTipos());
+    mav.addObject("generos", productoRepository.findAllGeneros());
+
+    return mav;
+}
+
 
     @RequestMapping(value="/listarProductos", method=RequestMethod.GET)
     public ModelAndView getProductosCliente() {
@@ -171,9 +218,40 @@ public class ProductoController {
         return mv;
     }
 
+    @RequestMapping(value="/novedades", method=RequestMethod.GET)
+    public ModelAndView novedades() {
+        ModelAndView mv = new ModelAndView("novedades");
+        LocalDate hace7Dias = LocalDate.now().minusDays(7);
+    List<Producto> productos = productoRepository.findProductosUltimos7Dias(hace7Dias);
+        mv.addObject("productos", productos);
+        return mv;
+    }
+
+    @RequestMapping(value="/ultimasOportunidades", method=RequestMethod.GET)
+    public ModelAndView ultimasOportunidades() {
+        List<Producto> productos = productoRepository.findProductosConDescuento();
+        ModelAndView mv = new ModelAndView("ultimasOportunidades");
+        mv.addObject("productos", productos);
+        return mv;
+    }
+
+    @RequestMapping(value="/femenino", method=RequestMethod.GET)
+    public ModelAndView femenino() {
+        ModelAndView mv = new ModelAndView("femenino");
+        List<Producto> productos = productoRepository.findByGenero("Femenino");
+        mv.addObject("productos", productos);
+        return mv;
+    }
+
+
+ @RequestMapping(value="/masculino", method=RequestMethod.GET)
+    public ModelAndView masculino() {
+        ModelAndView mv = new ModelAndView("masculino");
+        List<Producto> productos = productoRepository.findByGenero("Masculino");
+        mv.addObject("productos", productos);
+        return mv;
+    }
 
 
 
-
-    
 }
