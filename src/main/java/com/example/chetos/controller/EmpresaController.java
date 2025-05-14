@@ -77,10 +77,10 @@ public class EmpresaController {
     }
 
     // Metodo para mostrar el logo en index
-   @RequestMapping(value="/logo/{logo}", method=RequestMethod.GET)
+    @RequestMapping(value = "/logo/{logo}", method = RequestMethod.GET)
     @ResponseBody
 
-     public byte[] getLogo(@PathVariable("logo") String logo) throws IOException {
+    public byte[] getLogo(@PathVariable("logo") String logo) throws IOException {
         File path = new File("./src/main/resources/static/img/" + logo);
         if (logo != null || logo.trim().length() > 0) {
             return Files.readAllBytes(path.toPath());
@@ -89,4 +89,14 @@ public class EmpresaController {
 
     }
 
+   @GetMapping("/politicas")
+public String mostrarPoliticas(Model model) {
+    Empresa empresa = empresaService.obtenerEmpresaPorId(1L).orElse(new Empresa());
+    model.addAttribute("empresa", empresa);  // Ya incluye la política de cambio
+    return "politicas"; 
 }
+
+
+
+}
+

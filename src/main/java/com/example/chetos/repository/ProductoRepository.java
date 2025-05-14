@@ -31,5 +31,6 @@ List<Producto> findProductosConDescuento();
 
 
 List<Producto> findByGenero(String genero);
+List<Producto> findByEstado(String estado);
 
 }

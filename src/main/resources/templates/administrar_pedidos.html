@@ -331,6 +331,16 @@
                 </td>
                 <td th:text="${#temporals.format(pedido.fecha, 'dd-MM-yyyy')}"></td>
                 <td>
+                    <ul>
+                        <li th:each="detalle : ${venta.detalleVentaList}">
+                            <span th:text="${detalle.producto.nombre}"></span> -
+                            <span th:text="${detalle.cantidad}"></span> unid. -
+                            <span th:text="${detalle.talle}"></span> -
+                            <span th:text="${detalle.color}"></span>
+                        </li>
+                    </ul>
+                </td>
+                <td>
                     <form th:action="@{'/carrito/aceptar-pedido/' + ${pedido.id}}" method="POST"
                         style="display:inline;">
                         <button type="submit"

@@ -12,6 +12,7 @@ public interface ProductoService {
      
 
     List<Producto> findByGenero(String genero);
+    List<Producto> findByEstado(String estado);
 
 
 }

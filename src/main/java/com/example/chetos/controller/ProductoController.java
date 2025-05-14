@@ -101,7 +101,7 @@ public ModelAndView listarProductos(
         @RequestParam(required = false) String genero,
         @RequestParam(required = false) String nombre
 ) {
-    List<Producto> productos = productoRepository.findAll();
+    List<Producto> productos = productoRepository.findByEstado("Activo");
 
     // Filtrado manual en memoria (puedes optimizar esto con consultas dinámicas en BD si necesitas)
     if (talle != null && !talle.isEmpty()) {
@@ -147,13 +147,7 @@ public ModelAndView listarProductos(
 }
 
 
-    @RequestMapping(value="/listarProductos", method=RequestMethod.GET)
-    public ModelAndView getProductosCliente() {
-        ModelAndView mv = new ModelAndView("listarProductos");
-        List<Producto> productoList = productoRepository.findAll();
-        mv.addObject("productos", productoList);
-        return mv;
-    }
+    
 
 
     @RequestMapping(value="/editarProducto/{id}", method=RequestMethod.GET)
@@ -190,14 +184,10 @@ public ModelAndView listarProductos(
         productoExistente.setEstado(producto.getEstado());
         productoExistente.setStock(producto.getStock());
         productoRepository.save(productoExistente);
-        return "redirect:/listarProductos";
+        return "redirect:/listar-productos";
     }
 
-    @RequestMapping(value="/excluirProducto/{id}", method=RequestMethod.GET)
-    public String excluirProducto(@PathVariable("id") Long id) {
-        productoRepository.deleteById(id);
-        return "redirect:/listarProductos";
-    }
+
 
     @RequestMapping(value="/vermasProducto/{id}", method=RequestMethod.GET)
     public ModelAndView vermasProducto(@PathVariable("id") Long id) {

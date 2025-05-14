@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <title>Gestión de Empresa</title>
     <!-- Bootstrap CSS -->
@@ -43,13 +44,13 @@
         }
 
         .form-control:focus {
-            border-color: #ff6600;
+            border-color:#8B735B;
             box-shadow: 0 0 5px rgba(255, 102, 0, 0.5);
         }
 
         .btn-primary {
-            background-color: #ff6600;
-            border-color: #ff6600;
+            background-color: #8B735B;
+            border-color: #8B735B;
             padding: 10px 20px;
             font-size: 16px;
             border-radius: 8px;
@@ -57,8 +58,8 @@
         }
 
         .btn-primary:hover {
-            background-color: #e65c00;
-            border-color: #e65c00;
+            background-color: #8B735B;
+            border-color:#8B735B;
         }
 
         .form-group {
@@ -73,7 +74,7 @@
         }
 
         .form-control-file:focus {
-            border-color: #ff6600;
+            border-color: #8B735B;
         }
 
         .alert {
@@ -86,6 +87,7 @@
         }
     </style>
 </head>
+
 <body>
 
 
@@ -96,34 +98,53 @@
         <h2>Datos de la Empresa</h2>
 
         <!-- Mensaje flash (éxito o error) -->
-        <div th:if="${mensaje}" th:class="'alert alert-' + ${clase}" role="alert" id="mensajeFlash" th:text="${mensaje}"></div>
+        <div th:if="${mensaje}" th:class="'alert alert-' + ${clase}" role="alert" id="mensajeFlash"
+            th:text="${mensaje}"></div>
 
         <form th:action="@{/empresas/actualizar}" th:object="${empresa}" method="post" enctype="multipart/form-data">
             <input type="hidden" th:field="*{id}" />
 
             <div class="form-group">
                 <label for="nombre" class="form-label">Nombre:</label>
-                <input type="text" id="nombre" class="form-control" th:field="*{nombre}" placeholder="Ingrese el nombre de la empresa" />
+                <input type="text" id="nombre" class="form-control" th:field="*{nombre}"
+                    placeholder="Ingrese el nombre de la empresa" />
             </div>
 
             <div class="form-group">
                 <label for="direccion" class="form-label">Dirección:</label>
-                <input type="text" id="direccion" class="form-control" th:field="*{direccion}" placeholder="Ingrese la dirección de la empresa" />
+                <input type="text" id="direccion" class="form-control" th:field="*{direccion}"
+                    placeholder="Ingrese la dirección de la empresa" />
             </div>
 
             <div class="form-group">
                 <label for="telefono" class="form-label">Teléfono:</label>
-                <input type="text" id="telefono" class="form-control" th:field="*{telefono}" placeholder="Ingrese el número de teléfono" />
+                <input type="text" id="telefono" class="form-control" th:field="*{telefono}"
+                    placeholder="Ingrese el número de teléfono" />
             </div>
 
             <div class="form-group">
                 <label for="whatsapp" class="form-label">Whatsapp:</label>
-                <input type="text" id="whatsapp" class="form-control" th:field="*{whatsapp}" placeholder="Ingrese el número de WhatsApp" />
+                <input type="text" id="whatsapp" class="form-control" th:field="*{whatsapp}"
+                    placeholder="Ingrese el número de WhatsApp" />
             </div>
 
             <div class="form-group">
                 <label for="horario" class="form-label">Horario:</label>
-                <input type="text" id="horario" class="form-control" th:field="*{horario}" placeholder="Ingrese el horario de atención" />
+                <input type="text" id="horario" class="form-control" th:field="*{horario}"
+                    placeholder="Ingrese el horario de atención" />
+            </div>
+
+            <div class="mb-3">
+                <label for="politica" class="form-label">Política de Campra</label>
+                <textarea id="politica" th:field="*{politica}" class="form-control" rows="5"></textarea>
+
+
+            </div>
+
+            <div class="mb-3">
+                <label for="politicaCambio" class="form-label">Política de Cambio</label>
+               <textarea id="politicaCambio" th:field="*{politicaCambio}" class="form-control" rows="4"></textarea>
+
             </div>
 
             <div class="form-group">
@@ -154,4 +175,5 @@
         }, 4000);
     </script>
 </body>
+
 </html>

@@ -26,7 +26,15 @@ public class Empresa {
     @NotBlank
     private String horario;
 
-    @Column(name = "logo") // Asegúrate de que el nombre coincida con el de la base de datos
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String politica;
+
+    @Lob
+    @Column(columnDefinition = "TEXT")
+    private String politicaCambio; 
+
+    @Column(name = "logo") 
     private String logo;
 
     // Getters y setters
@@ -78,11 +86,27 @@ public class Empresa {
         this.horario = horario;
     }
 
+    public String getPolitica() {
+        return politica;
+    }
+
+    public void setPolitica(String politica) {
+        this.politica = politica;
+    }
+
+    public String getPoliticaCambio() {
+        return politicaCambio;
+    }
+
+    public void setPoliticaCambio(String politicaCambio) {
+        this.politicaCambio = politicaCambio;
+    }
+
     public String getLogo() {
         return logo;
     }
 
     public void setLogo(String logo) {
-        this.logo= logo;
+        this.logo = logo;
     }
 }

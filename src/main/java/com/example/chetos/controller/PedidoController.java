@@ -64,6 +64,16 @@ public class PedidoController {
         return "carrito";
     }
 
+    @PostMapping("/eliminar")
+public String eliminarDelCarrito(@RequestParam int index, HttpSession session) {
+    List<DetallePedido> carrito = (List<DetallePedido>) session.getAttribute("carrito");
+    if (carrito != null && index >= 0 && index < carrito.size()) {
+        carrito.remove(index);
+        session.setAttribute("carrito", carrito);
+    }
+    return "redirect:/carrito/ver";
+}
+
     // Añadir un producto al carrito
     @PostMapping("/agregar")
     public String agregarAlCarrito(@RequestParam long productoId,

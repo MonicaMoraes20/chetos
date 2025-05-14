@@ -112,7 +112,19 @@
       <input type="number" class="form-control" id="precio" name="precio" step="0.01" th:value="${precio}" required>
 
       <label for="descuento" class="form-label">Descuento (%)</label>
-      <input type="number" class="form-control" id="descuento" name="descuento" step="0.01" th:value="${descuento}">
+         <select class="form-select" name="descuento" id="descuento" required>
+                    <option value="0" th:selected="${descuento eq 0}">0%</option>
+                    <option value="5" th:selected="${descuento eq 5}">5%</option>
+                    <option value="10" th:selected="${descuento eq 10}">10%</option>
+                    <option value="15" th:selected="${descuento eq 15}">15%</option>
+                    <option value="20" th:selected="${descuento eq 20}">20%</option>
+                    <option value="25" th:selected="${descuento eq 25}">25%</option>
+                    <option value="30" th:selected="${descuento eq 30}">30%</option>
+                    <option value="35" th:selected="${descuento eq 35}">35%</option>
+                    <option value="40" th:selected="${descuento eq 40}">40%</option>
+                    <option value="45" th:selected="${descuento eq 45}">45%</option>
+                    <option value="50" th:selected="${descuento eq 50}">50%</option>
+                </select>
 
       <label for="estado" class="form-label">Estado</label>
       <select class="form-select" id="estado" name="estado" required>

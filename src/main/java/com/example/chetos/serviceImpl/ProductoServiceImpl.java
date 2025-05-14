@@ -39,4 +39,11 @@ public class ProductoServiceImpl implements ProductoService {
        return productoRepository.findByGenero(genero);
    }
 
+@Override
+   public List<Producto> findByEstado(String estado) {
+       return productoRepository.findByEstado(estado);
+   }
+
+
+
     }

@@ -27,7 +27,7 @@
                     <div class="row no-gutters">
                         <div class="col-md-12 col-lg-8" style="padding: 0px 15px;">
                             <div class="items">
-                                <div class="product" th:each="detalle : ${carrito}">
+                                <div class="product" th:each="detalle, iterStat : ${carrito}">
                                     <div class="row align-items-center">
                                         <div class="col-md-3">
                                             <img class="img-fluid mx-auto d-block image"
@@ -53,6 +53,12 @@
                                             <b><span class="price"
                                                     th:text="${#numbers.formatDecimal(detalle.precio_unit * detalle.cantidad, 1, 'COMMA', 2, 'POINT')}"></span></b>
                                         </div>
+                                        <form th:action="@{/carrito/eliminar}" method="post" style="display:inline;">
+                                            <input type="hidden" name="index" th:value="${iterStat.index}" />
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-trash"></i> Eliminar
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
