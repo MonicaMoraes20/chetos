@@ -1,7 +1,9 @@
 package com.example.chetos.controller;
 
 import com.example.chetos.model.Producto;
+import com.example.chetos.model.ImagenCarrusel;
 import com.example.chetos.repository.ProductoRepository;
+import com.example.chetos.repository.ImagenCarruselRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,6 +19,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,6 +28,9 @@ import java.util.stream.Collectors;
 public class ProductoController {
     @Autowired
     ProductoRepository productoRepository;
+
+      @Autowired
+    ImagenCarruselRepository imagenCarruselRepository; 
 
     @RequestMapping(value="/inicioP", method = RequestMethod.GET)
     public String inicio() { return "home"; }
@@ -136,6 +142,32 @@ public ModelAndView listarProductos(
 
     ModelAndView mav = new ModelAndView("index");
     mav.addObject("productos", productos);
+
+// Obtener las imágenes del carrusel
+      Optional<ImagenCarrusel> carruselOptional = imagenCarruselRepository.findFirstBy();
+        List<String> carruselImagesList = new ArrayList<>();
+
+        if (carruselOptional.isPresent()) {
+            ImagenCarrusel carrusel = carruselOptional.get();
+            if (carrusel.getFoto() != null && !carrusel.getFoto().isEmpty()) {
+                carruselImagesList.add(carrusel.getFoto());
+            }
+            if (carrusel.getFoto1() != null && !carrusel.getFoto1().isEmpty()) {
+                carruselImagesList.add(carrusel.getFoto1());
+            }
+            if (carrusel.getFoto2() != null && !carrusel.getFoto2().isEmpty()) {
+                carruselImagesList.add(carrusel.getFoto2());
+            }
+            if (carrusel.getFoto3() != null && !carrusel.getFoto3().isEmpty()) {
+                carruselImagesList.add(carrusel.getFoto3());
+            }
+            if (carrusel.getFoto4() != null && !carrusel.getFoto4().isEmpty()) {
+                carruselImagesList.add(carrusel.getFoto4());
+            }
+        }
+
+        mav.addObject("carruselImages", carruselImagesList);
+    
 
     // También puedes enviar las listas para poblar los selects
     mav.addObject("talles", productoRepository.findAllTalles());
